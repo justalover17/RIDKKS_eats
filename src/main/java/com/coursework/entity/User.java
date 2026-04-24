@@ -34,7 +34,10 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public int getUserId() { return userId; }
+    public int getUserId() {
+        return userId;
+    }
+
     public String getName() { return name; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }

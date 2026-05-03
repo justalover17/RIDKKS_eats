@@ -334,7 +334,7 @@
     <a href="${pageContext.request.contextPath}/" class="logo">
         <span class="logo-text">Riddik's Eats</span>
     </a>
-    <a href="${pageContext.request.contextPath}/menu" class="nav-back">← Back to Menu</a>
+    <a href="${pageContext.request.contextPath}/food" class="nav-back">← Back to Menu</a>
 </nav>
 
 <div class="page">
@@ -353,10 +353,9 @@
 
         <c:when test="${empty cartItems}">
             <div class="cart-empty">
-                <div class="icon">🛒</div>
                 <h2>Nothing here yet</h2>
                 <p>Browse our menu and add something delicious.</p>
-                <a href="${pageContext.request.contextPath}/menu" class="btn-browse">Browse Menu</a>
+                <a href="${pageContext.request.contextPath}/food" class="btn-browse">Browse Menu</a>
             </div>
         </c:when>
 
@@ -447,7 +446,7 @@
                     </div>
 
                     <a href="${pageContext.request.contextPath}/checkout" class="btn-checkout">Proceed to Checkout</a>
-                    <a href="${pageContext.request.contextPath}/menu" class="btn-continue">+ Add More Items</a>
+                    <a href="${pageContext.request.contextPath}/food" class="btn-continue">+ Add More Items</a>
                 </div>
 
             </div>

@@ -12,7 +12,8 @@ public class CartDetailsDaoImpl implements CartDetailsDao {
         Connection conn = null;
         try {
             conn = DatabaseConnection.getConnection();
-            String sql = "INSERT INTO cart_details (cart_id, food_id, quantity) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO cart_details (cart_id, food_id, quantity) VALUES (?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, cd.getCartId());
             ps.setInt(2, cd.getFoodId());

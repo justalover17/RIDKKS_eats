@@ -14,80 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/index.css">
-    <style>
-        .page-header {
-            background-color: var(--dark-bg);
-            padding: 4rem 2rem;
-            text-align: center;
-            color: var(--white);
-            margin-bottom: 4rem;
-        }
-        .page-header h1 {
-            color: var(--white);
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-        .food-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1280px;
-            margin: 0 auto 4rem auto;
-            padding: 0 2rem;
-        }
-        .food-item-card {
-            background: var(--white);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-        }
-        .food-item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-        .food-item-img {
-            height: 200px;
-            background-color: #f1f3f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-        .food-item-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .food-item-content h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-        .food-item-desc {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-        .food-item-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-        }
-        .food-price {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        .btn-add {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/food-list.css">
 </head>
 <body>
 
@@ -102,7 +29,7 @@
         </div>
         <div class="header-right">
             <% if (loggedInUser == null) { %>
-            <button class="btn btn-login" id="headerLoginBtn">Login</button>
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-login">Login</a>
             <% } else { %>
             <div class="user-icons">
                 <button class="icon-btn" title="Notifications">
@@ -128,9 +55,10 @@
 <div class="category-filters" style="text-align: center; margin-bottom: 3rem;">
     <a href="${pageContext.request.contextPath}/food" class="btn btn-login" style="margin: 0 5px;">All</a>
     <a href="${pageContext.request.contextPath}/food?category=1" class="btn btn-login" style="margin: 0 5px;">Nepali</a>
-    <a href="${pageContext.request.contextPath}/food?category=2" class="btn btn-login" style="margin: 0 5px;">Italian</a>
-    <a href="${pageContext.request.contextPath}/food?category=3" class="btn btn-login" style="margin: 0 5px;">Burgers</a>
-    <a href="${pageContext.request.contextPath}/food?category=4" class="btn btn-login" style="margin: 0 5px;">Desserts</a>
+    <a href="${pageContext.request.contextPath}/food?category=2" class="btn btn-login" style="margin: 0 5px;">Breakfast</a>
+    <a href="${pageContext.request.contextPath}/food?category=3" class="btn btn-login" style="margin: 0 5px;">Desserts</a>
+    <a href="${pageContext.request.contextPath}/food?category=4" class="btn btn-login" style="margin: 0 5px;">Drinks</a>
+    <a href="${pageContext.request.contextPath}/food?category=5" class="btn btn-login" style="margin: 0 5px;">Italian</a>
 </div>
 
 <div class="food-grid">
@@ -145,7 +73,8 @@
                 <div class="food-item-card">
                     <a href="${pageContext.request.contextPath}/food?action=view&id=${food.foodId}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
                         <div class="food-item-img" style="overflow: hidden; display: flex; align-items: center; justify-content: center; height: 200px; background-color: #f1f3f5;">
-                            <img src="${pageContext.request.contextPath}/static/images/${food.name}.png" alt="${food.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/static/images/logo.png'">
+                            <c:url value="/static/images/${food.name}.png" var="foodImageUrl" />
+                            <img src="${foodImageUrl}" alt="${food.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/static/images/logo.png'">
                         </div>
                         <div class="food-item-content" style="padding: 1.5rem; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
                             <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;"><c:out value="${food.name}" /></h3>
@@ -201,83 +130,7 @@
     </div>
 </footer>
 
-<!-- Modals -->
-<div class="modal-overlay" id="modalOverlay"></div>
 
-<jsp:include page="/WEB-INF/views/login.jsp" />
-<jsp:include page="/WEB-INF/views/register.jsp" />
-
-<script>
-    // Modals Logic for Food List Page
-    const overlay = document.getElementById('modalOverlay');
-    const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
-
-    const loginBtn = document.getElementById('headerLoginBtn');
-    const closeBtns = document.querySelectorAll('.close-btn');
-
-    const toRegister = document.getElementById('toRegister');
-    const toLogin = document.getElementById('toLogin');
-
-    function openModal(modal) {
-        if(!modal) return;
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        if(loginModal) loginModal.classList.remove('active');
-        if(registerModal) registerModal.classList.remove('active');
-        modal.classList.add('active');
-    }
-
-    function closeModal() {
-        if(overlay) overlay.classList.remove('active');
-        if(loginModal) loginModal.classList.remove('active');
-        if(registerModal) registerModal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    if(loginBtn) {
-        loginBtn.addEventListener('click', () => openModal(loginModal));
-    }
-
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', closeModal);
-    });
-
-    if(overlay) overlay.addEventListener('click', closeModal);
-
-    if(toRegister) {
-        toRegister.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(registerModal);
-        });
-    }
-
-    if(toLogin) {
-        toLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(loginModal);
-        });
-    }
-
-    // Register Form Interceptor
-    const registerForm = document.getElementById('registerForm');
-    if(registerForm) {
-        registerForm.addEventListener('submit', function(e) {
-            const pass = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('confirmPassword').value;
-
-            if(pass !== confirm) {
-                e.preventDefault();
-                alert("Passwords do not match!");
-                return;
-            }
-
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            document.getElementById('combinedName').value = firstName + " " + lastName;
-        });
-    }
-</script>
 
 </body>
 </html>

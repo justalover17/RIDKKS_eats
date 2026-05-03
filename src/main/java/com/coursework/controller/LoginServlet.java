@@ -23,7 +23,8 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        request.getRequestDispatcher("/WEB-INF/views/login.jsp")
+                .forward(request, response);
     }
 
     @Override
@@ -36,12 +37,16 @@ public class LoginServlet extends HttpServlet {
         User user = userDao.findUserByEmail(email);
 
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?loginError=1");
+            request.setAttribute("error", "Invalid email or password.");
+            request.getRequestDispatcher("/WEB-INF/views/login.jsp")
+                    .forward(request, response);
             return;
         }
 
         if (!PasswordUtil.checkPassword(password, user.getPassword())) {
-            response.sendRedirect(request.getContextPath() + "/index.jsp?loginError=1");
+            request.setAttribute("error", "Invalid email or password.");
+            request.getRequestDispatcher("/WEB-INF/views/login.jsp")
+                    .forward(request, response);
             return;
         }
 
@@ -49,6 +54,6 @@ public class LoginServlet extends HttpServlet {
 
         CookieUtil.addCookie(response, "email", user.getEmail(), 24 * 60 * 60);
 
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 }

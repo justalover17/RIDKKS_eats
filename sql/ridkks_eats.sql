@@ -65,9 +65,10 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_name`) VALUES
 (1, 'Nepali'),
-(2, 'Italian'),
-(3, 'Fast Food'),
-(4, 'Desserts');
+(2, 'Breakfast'),
+(3, 'Desserts'),
+(4, 'Drinks'),
+(5, 'Italian');
 
 -- --------------------------------------------------------
 
@@ -90,14 +91,34 @@ CREATE TABLE `food_item` (
 --
 
 INSERT INTO `food_item` (`food_id`, `name`, `price`, `category_id`, `description`) VALUES
-(1, 'Chicken Momo', 250.00, 1, 'Delicious steamed dumplings filled with spiced minced chicken, served with traditional tomato achar.'),
-(2, 'Pizza', 750.00, 2, 'Classic wood-fired pizza with mozzarella cheese, fresh basil, and rich tomato sauce.'),
-(3, 'Riddiks Breakfast', 450.00, 3, 'Our signature morning platter with eggs, toast, sausages, baked beans, and grilled tomatoes.'),
-(4, 'Spaghetti', 550.00, 2, 'Traditional Italian spaghetti tossed in rich bolognese sauce and topped with parmesan cheese.'),
-(5, 'Vanilla  Waffle', 350.00, 4, 'Crispy golden waffles topped with premium vanilla ice cream and drizzled with maple syrup.'),
-(6, 'club sandwich', 300.00, 3, 'Triple-decker sandwich layered with chicken, fried egg, lettuce, tomatoes, and mayo.'),
-(7, 'pad thai', 480.00, 1, 'Stir-fried rice noodles with eggs, peanuts, bean sprouts, and authentic sweet-savory sauce.'),
-(8, 'sirloin steak', 1200.00, 3, 'Premium cut sirloin steak grilled to perfection, served with mashed potatoes and pepper sauce.');
+(1, 'Burger', 250.00, 1, 'Delicious juicy burger with fresh veggies.'),
+(2, 'Chicken Biryani', 450.00, 1, 'Authentic spiced chicken biryani with raita.'),
+(3, 'Chicken Chowmein', 200.00, 1, 'Stir-fried noodles with chicken and veggies.'),
+(4, 'Chicken Momo', 250.00, 1, 'Steamed chicken dumplings with spicy achar.'),
+(5, 'Fried Rice', 220.00, 1, 'Wok-tossed fried rice with fresh ingredients.'),
+(6, 'Kathi Roll', 180.00, 1, 'Spicy chicken wrapped in a flaky paratha.'),
+(7, 'Keema Noodles', 260.00, 1, 'Spicy minced meat served over perfectly cooked noodles.'),
+(8, 'Momo Platter', 550.00, 1, 'A grand assortment of our best momos in different styles.'),
+(9, 'Pad thai', 480.00, 1, 'Authentic sweet and savory stir-fried rice noodles.'),
+(10, 'Club sandwich', 300.00, 2, 'Triple decker sandwich with chicken, egg, and mayo.'),
+(11, 'Riddiks Breakfast', 450.00, 2, 'Eggs, toast, sausages, beans, and grilled tomatoes.'),
+(12, 'Vanilla  Waffle', 350.00, 2, 'Crispy waffle with premium vanilla ice cream and syrup.'),
+(13, 'Croissants', 200.00, 2, 'Freshly baked flaky buttery croissants.'),
+(14, 'Smoothie Bowl', 350.00, 2, 'Healthy and fresh fruit smoothie bowl.'),
+(15, 'Chocolate Brownie', 250.00, 3, 'Rich, fudgy chocolate brownie served warm.'),
+(16, 'Red Velvet Cake', 300.00, 3, 'Classic red velvet slice with cream cheese frosting.'),
+(17, 'Blue Berry Cake', 320.00, 3, 'Soft cake loaded with fresh blueberries and cream.'),
+(18, 'Tiramisu', 400.00, 3, 'Classic Italian coffee-flavored dessert with mascarpone.'),
+(19, 'Banana Cake', 200.00, 3, 'Moist and sweet homemade banana bread slice.'),
+(20, 'Iced Matcha Latte', 300.00, 4, 'Refreshing premium iced matcha green tea.'),
+(21, 'Iced Americano', 250.00, 4, 'Chilled espresso poured over iced water.'),
+(22, 'Peach Iced Tea', 220.00, 4, 'Sweet and refreshing peach infused tea over ice.'),
+(23, 'Cold Drinks', 100.00, 4, 'Assorted chilled carbonated beverages.'),
+(24, 'Mojito', 350.00, 4, 'Classic mint and lime refreshing cooler.'),
+(25, 'Strawberry Milkshake', 350.00, 4, 'Creamy shake blended with fresh strawberries.'),
+(26, 'Pizza', 750.00, 5, 'Classic wood-fired pizza with rich tomato sauce and mozzarella.'),
+(27, 'Spaghetti', 550.00, 5, 'Traditional Italian spaghetti tossed in rich bolognese sauce.'),
+(28, 'Sirloin steak', 1200.00, 5, 'Premium cut steak grilled to perfection with mashed potatoes.');
 
 -- --------------------------------------------------------
 
@@ -149,8 +170,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `phone`, `role`) VALUES
-    (1, 'Admin', 'admin@gmail.com', 'admin@123', '9800000000', 'admin'),
-    (2, 'Sagun Gurung', 'sagun4533@gmail.com', 'sagun@123', '9817178207', 'customer');
+    (1, 'Admin', 'admin@gmail.com', '$2a$10$5tG8ImLq.HApXHgeKcbuvuFi3QJNEcEM8azDTjcjNgk1UG3Se5.x.', '9800000000', 'admin');
+
+
 
 -- Indexes for dumped tables
 --
@@ -226,13 +248,13 @@ ALTER TABLE `cart_details`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-    MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+    MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `food_item`
 --
 ALTER TABLE `food_item`
-    MODIFY `food_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+    MODIFY `food_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `orders`

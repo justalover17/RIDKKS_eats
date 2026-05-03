@@ -14,92 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/index.css">
-    <style>
-        .view-container {
-            max-width: 1100px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-        .view-image {
-            width: 100%;
-            height: 500px;
-            border-radius: 20px;
-            background-size: cover;
-            background-position: center;
-            box-shadow: var(--shadow-lg);
-            background-color: #f1f3f5;
-        }
-        .view-details {
-            display: flex;
-            flex-direction: column;
-        }
-        .view-title {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .view-price {
-            font-size: 2rem;
-            color: var(--primary-color);
-            font-weight: 700;
-            margin-bottom: 2rem;
-        }
-        .view-desc {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 3rem;
-        }
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 2rem;
-        }
-        .qty-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid var(--border-color);
-            background: var(--white);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .qty-btn:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-        .qty-input {
-            width: 60px;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border: none;
-            background: transparent;
-        }
-        .add-cart-form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        @media (max-width: 768px) {
-            .view-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                margin: 2rem auto;
-            }
-            .view-image {
-                height: 300px;
-            }
-            .view-title {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/food-view.css">
 </head>
 <body>
 
@@ -114,7 +29,7 @@
         </div>
         <div class="header-right">
             <% if (loggedInUser == null) { %>
-                <button class="btn btn-login" id="headerLoginBtn">Login</button>
+                <a href="${pageContext.request.contextPath}/login" class="btn btn-login">Login</a>
             <% } else { %>
                 <div class="user-icons">
                     <button class="icon-btn" title="Notifications">
@@ -133,8 +48,9 @@
 </header>
 
 <div class="view-container">
-    <div class="view-image" style="background-image: url('${pageContext.request.contextPath}/static/images/${food.name}.png');">
-        <img src="${pageContext.request.contextPath}/static/images/${food.name}.png" style="display:none;" onerror="this.parentElement.style.backgroundImage='url(\'${pageContext.request.contextPath}/static/images/logo.png\')'">
+    <c:url value="/static/images/${food.name}.png" var="foodImageUrl" />
+    <div class="view-image" style="background-image: url('${foodImageUrl}');">
+        <img src="${foodImageUrl}" style="display:none;" onerror="this.parentElement.style.backgroundImage='url(\'${pageContext.request.contextPath}/static/images/logo.png\')'">
     </div>
     <div class="view-details">
         <a href="${pageContext.request.contextPath}/food" style="color: var(--text-muted); margin-bottom: 1rem; display: inline-block;">&larr; Back to Menu</a>
@@ -204,12 +120,6 @@
     </div>
 </footer>
 
-<!-- Modals -->
-<div class="modal-overlay" id="modalOverlay"></div>
-
-<jsp:include page="/WEB-INF/views/login.jsp" />
-<jsp:include page="/WEB-INF/views/register.jsp" />
-
 <script>
     // Quantity Selector Logic
     const decreaseBtn = document.getElementById('decreaseQty');
@@ -225,57 +135,6 @@
         increaseBtn.addEventListener('click', () => {
             let current = parseInt(qtyInput.value);
             if(current < 20) qtyInput.value = current + 1;
-        });
-    }
-
-    // Modals Logic
-    const overlay = document.getElementById('modalOverlay');
-    const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
-    
-    const loginBtn = document.getElementById('headerLoginBtn');
-    const closeBtns = document.querySelectorAll('.close-btn');
-    
-    const toRegister = document.getElementById('toRegister');
-    const toLogin = document.getElementById('toLogin');
-
-    function openModal(modal) {
-        if(!modal) return;
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; 
-        if(loginModal) loginModal.classList.remove('active');
-        if(registerModal) registerModal.classList.remove('active');
-        modal.classList.add('active');
-    }
-
-    function closeModal() {
-        if(overlay) overlay.classList.remove('active');
-        if(loginModal) loginModal.classList.remove('active');
-        if(registerModal) registerModal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    if(loginBtn) {
-        loginBtn.addEventListener('click', () => openModal(loginModal));
-    }
-
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', closeModal);
-    });
-
-    if(overlay) overlay.addEventListener('click', closeModal);
-
-    if(toRegister) {
-        toRegister.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(registerModal);
-        });
-    }
-
-    if(toLogin) {
-        toLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(loginModal);
         });
     }
 </script>

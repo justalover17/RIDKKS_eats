@@ -58,6 +58,64 @@ public class FoodItemDaoImpl implements FoodItemDao {
     }
 
     @Override
+    public ArrayList<FoodItem> fetchFoodByCategory(int categoryId) {
+        ArrayList<FoodItem> list = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM food_item WHERE category_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new FoodItem(
+                        rs.getInt("food_id"),
+                        rs.getString("name"),
+                        rs.getDouble("price"),
+                        rs.getInt("category_id"),
+                        rs.getString("description"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("updated_at")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching food by category: " + e.getMessage());
+        } finally {
+            DatabaseConnection.closeConnection(conn);
+        }
+        return list;
+    }
+
+    @Override
+    public ArrayList<FoodItem> searchFood(String query) {
+        ArrayList<FoodItem> list = new ArrayList<>();
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "SELECT * FROM food_item WHERE name LIKE ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + query + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new FoodItem(
+                        rs.getInt("food_id"),
+                        rs.getString("name"),
+                        rs.getDouble("price"),
+                        rs.getInt("category_id"),
+                        rs.getString("description"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("updated_at")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error searching food: " + e.getMessage());
+        } finally {
+            DatabaseConnection.closeConnection(conn);
+        }
+        return list;
+    }
+
+    @Override
     public FoodItem findFoodById(int id) {
         Connection conn = null;
         try {

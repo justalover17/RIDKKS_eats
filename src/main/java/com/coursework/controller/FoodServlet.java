@@ -71,7 +71,23 @@ public class FoodServlet extends HttpServlet {
 
     private void listFood(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ArrayList<FoodItem> foods = foodDao.fetchAllFood();
+        String categoryParam = request.getParameter("category");
+        String searchParam = request.getParameter("search");
+        
+        ArrayList<FoodItem> foods;
+        if (searchParam != null && !searchParam.trim().isEmpty()) {
+            foods = foodDao.searchFood(searchParam.trim());
+        } else if (categoryParam != null && !categoryParam.trim().isEmpty()) {
+            try {
+                int categoryId = Integer.parseInt(categoryParam);
+                foods = foodDao.fetchFoodByCategory(categoryId);
+            } catch (NumberFormatException e) {
+                foods = foodDao.fetchAllFood();
+            }
+        } else {
+            foods = foodDao.fetchAllFood();
+        }
+        
         request.setAttribute("foods", foods);
         request.getRequestDispatcher("/WEB-INF/views/food-list.jsp")
                 .forward(request, response);

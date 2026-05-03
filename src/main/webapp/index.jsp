@@ -27,7 +27,7 @@
         </div>
         <div class="header-right">
             <% if (loggedInUser == null) { %>
-            <button class="btn btn-login" id="headerLoginBtn">Login</button>
+            <a href="${pageContext.request.contextPath}/login" class="btn btn-login">Login</a>
             <% } else { %>
             <div class="user-icons">
                 <button class="icon-btn" title="Notifications">
@@ -52,7 +52,7 @@
         <h1>Find your perfect meal.</h1>
         <p>Search your favorite cuisine</p>
         <form class="search-bar-container" action="${pageContext.request.contextPath}/food" method="get">
-            <input type="text" name="query" class="search-input" id="homeSearchInput" placeholder="e.g. Momo, Pizza, Burgers...">
+            <input type="text" name="search" class="search-input" id="homeSearchInput" placeholder="e.g. Momo, Pizza, Burgers...">
             <button type="submit" class="search-btn">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </button>
@@ -70,35 +70,35 @@
     <div class="cuisine-grid">
         <!-- 8 Grid Items Using Local Images -->
         <a href="${pageContext.request.contextPath}/food?action=view&id=1" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Chicken%20Momo.png');"></div>
-            <div class="card-info"><h3>Chicken Momo</h3></div>
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Burger.png');"></div>
+            <div class="card-info"><h3>Burger</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=2" class="cuisine-card">
+        <a href="${pageContext.request.contextPath}/food?action=view&id=26" class="cuisine-card">
             <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Pizza.png');"></div>
             <div class="card-info"><h3>Pizza</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=3" class="cuisine-card">
+        <a href="${pageContext.request.contextPath}/food?action=view&id=11" class="cuisine-card">
             <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Riddiks%20Breakfast.png');"></div>
             <div class="card-info"><h3>Riddik's Breakfast</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=4" class="cuisine-card">
+        <a href="${pageContext.request.contextPath}/food?action=view&id=27" class="cuisine-card">
             <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Spaghetti.png');"></div>
             <div class="card-info"><h3>Spaghetti</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=5" class="cuisine-card">
+        <a href="${pageContext.request.contextPath}/food?action=view&id=12" class="cuisine-card">
             <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Vanilla%20%20Waffle.png');"></div>
             <div class="card-info"><h3>Vanilla Waffle</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=6" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/club%20sandwich.png');"></div>
+        <a href="${pageContext.request.contextPath}/food?action=view&id=10" class="cuisine-card">
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Club%20sandwich.png');"></div>
             <div class="card-info"><h3>Club Sandwich</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=7" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/pad%20thai.png');"></div>
+        <a href="${pageContext.request.contextPath}/food?action=view&id=9" class="cuisine-card">
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Pad%20thai.png');"></div>
             <div class="card-info"><h3>Pad Thai</h3></div>
         </a>
-        <a href="${pageContext.request.contextPath}/food?action=view&id=8" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/sirloin%20steak.png');"></div>
+        <a href="${pageContext.request.contextPath}/food?action=view&id=28" class="cuisine-card">
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Sirloin%20steak.png');"></div>
             <div class="card-info"><h3>Sirloin Steak</h3></div>
         </a>
     </div>
@@ -151,120 +151,7 @@
     </div>
 </footer>
 
-<!-- Modals -->
-<div class="modal-overlay" id="modalOverlay"></div>
 
-<jsp:include page="/WEB-INF/views/login.jsp" />
-<jsp:include page="/WEB-INF/views/register.jsp" />
-
-<script>
-    // Search Bar Hover Interaction for Home Background
-    const searchInput = document.getElementById('homeSearchInput');
-    const homeBg = document.getElementById('homeBg');
-
-    if(searchInput && homeBg) {
-        searchInput.addEventListener('focus', () => {
-            homeBg.classList.add('focused');
-        });
-        searchInput.addEventListener('blur', () => {
-            homeBg.classList.remove('focused');
-        });
-    }
-
-    // Modals Logic
-    const overlay = document.getElementById('modalOverlay');
-    const loginModal = document.getElementById('loginModal');
-    const registerModal = document.getElementById('registerModal');
-
-    const loginBtn = document.getElementById('headerLoginBtn');
-    const closeBtns = document.querySelectorAll('.close-btn');
-
-    const toRegister = document.getElementById('toRegister');
-    const toLogin = document.getElementById('toLogin');
-
-    function openModal(modal) {
-        if(!modal) return;
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden'; // prevent background scrolling
-        // Close all first
-        if(loginModal) loginModal.classList.remove('active');
-        if(registerModal) registerModal.classList.remove('active');
-        modal.classList.add('active');
-    }
-
-    function closeModal() {
-        if(overlay) overlay.classList.remove('active');
-        if(loginModal) loginModal.classList.remove('active');
-        if(registerModal) registerModal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    if(loginBtn) {
-        loginBtn.addEventListener('click', () => openModal(loginModal));
-    }
-
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', closeModal);
-    });
-
-    if(overlay) overlay.addEventListener('click', closeModal);
-
-    if(toRegister) {
-        toRegister.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(registerModal);
-        });
-    }
-
-    if(toLogin) {
-        toLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            openModal(loginModal);
-        });
-    }
-
-    // Register Form Interceptor
-    const registerForm = document.getElementById('registerForm');
-    if(registerForm) {
-        registerForm.addEventListener('submit', function(e) {
-            const pass = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('confirmPassword').value;
-
-            if(pass !== confirm) {
-                e.preventDefault();
-                alert("Passwords do not match!");
-                return;
-            }
-
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            document.getElementById('combinedName').value = firstName + " " + lastName;
-        });
-    }
-
-    // URL Parameter Handling for Login/Register Errors and Success
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('loginError')) {
-        const errMsg = document.getElementById('loginErrorMsg');
-        if(errMsg) {
-            errMsg.textContent = "Invalid email or password!";
-            errMsg.style.display = 'block';
-        }
-        openModal(loginModal);
-    }
-    if(urlParams.has('registerError')) {
-        const errMsg = document.getElementById('registerErrorMsg');
-        if(errMsg) {
-            errMsg.textContent = "Registration failed or email already exists.";
-            errMsg.style.display = 'block';
-        }
-        openModal(registerModal);
-    }
-    if(urlParams.has('loginOpen')) {
-        alert("Registered successfully! Please login.");
-        openModal(loginModal);
-    }
-</script>
 
 </body>
 </html>

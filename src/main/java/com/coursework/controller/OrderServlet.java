@@ -45,7 +45,7 @@ public class OrderServlet extends HttpServlet {
         if (action == null) {
             action = "history";
         }
-
+// test
         switch (action) {
             case "checkout":
                 checkout(request, response);

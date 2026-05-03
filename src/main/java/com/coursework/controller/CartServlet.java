@@ -37,7 +37,7 @@ public class CartServlet extends HttpServlet {
         if (action == null) {
             action = "view";
         }
-
+// chabged
         switch (action) {
             case "view":
                 viewCart(request, response);

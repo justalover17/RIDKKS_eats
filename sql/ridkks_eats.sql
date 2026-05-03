@@ -148,6 +148,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
+INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `phone`, `role`) VALUES
+    (1, 'Admin', 'admin@gmail.com', 'admin@123', '9800000000', 'admin'),
+    (2, 'Sagun Gurung', 'sagun4533@gmail.com', 'sagun@123', '9817178207', 'customer');
+
 -- Indexes for dumped tables
 --
 

@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `cart` (
                         `cart_id` int(11) NOT NULL,
                         `user_id` int(11) DEFAULT NULL,
-                        `created_date` date DEFAULT NULL
+                        `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -54,7 +54,9 @@ CREATE TABLE `cart_details` (
 
 CREATE TABLE `category` (
                             `category_id` int(11) NOT NULL,
-                            `category_name` varchar(50) NOT NULL
+                            `category_name` varchar(50) NOT NULL,
+                            `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+                            `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -62,8 +64,10 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`category_id`, `category_name`) VALUES
-                                                            (2, 'Drinks'),
-                                                            (1, 'Pizza');
+(1, 'Nepali'),
+(2, 'Italian'),
+(3, 'Fast Food'),
+(4, 'Desserts');
 
 -- --------------------------------------------------------
 
@@ -76,7 +80,9 @@ CREATE TABLE `food_item` (
                              `name` varchar(100) NOT NULL,
                              `price` decimal(10,2) NOT NULL,
                              `category_id` int(11) DEFAULT NULL,
-                             `description` varchar(500) DEFAULT NULL
+                             `description` varchar(500) DEFAULT NULL,
+                             `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+                             `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -84,7 +90,14 @@ CREATE TABLE `food_item` (
 --
 
 INSERT INTO `food_item` (`food_id`, `name`, `price`, `category_id`, `description`) VALUES
-    (1, 'Margherita', 500.00, 1, NULL);
+(1, 'Chicken Momo', 250.00, 1, 'Delicious steamed dumplings filled with spiced minced chicken, served with traditional tomato achar.'),
+(2, 'Pizza', 750.00, 2, 'Classic wood-fired pizza with mozzarella cheese, fresh basil, and rich tomato sauce.'),
+(3, 'Riddiks Breakfast', 450.00, 3, 'Our signature morning platter with eggs, toast, sausages, baked beans, and grilled tomatoes.'),
+(4, 'Spaghetti', 550.00, 2, 'Traditional Italian spaghetti tossed in rich bolognese sauce and topped with parmesan cheese.'),
+(5, 'Vanilla  Waffle', 350.00, 4, 'Crispy golden waffles topped with premium vanilla ice cream and drizzled with maple syrup.'),
+(6, 'club sandwich', 300.00, 3, 'Triple-decker sandwich layered with chicken, fried egg, lettuce, tomatoes, and mayo.'),
+(7, 'pad thai', 480.00, 1, 'Stir-fried rice noodles with eggs, peanuts, bean sprouts, and authentic sweet-savory sauce.'),
+(8, 'sirloin steak', 1200.00, 3, 'Premium cut sirloin steak grilled to perfection, served with mashed potatoes and pepper sauce.');
 
 -- --------------------------------------------------------
 
@@ -126,17 +139,15 @@ CREATE TABLE `users` (
                          `email` varchar(100) NOT NULL,
                          `password` varchar(255) NOT NULL,
                          `phone` varchar(20) DEFAULT NULL,
-                         `role` varchar(20) DEFAULT NULL
+                         `role` varchar(20) DEFAULT NULL,
+                         `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+                         `updated_at` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `phone`, `role`) VALUES
-    (1, 'Kushal', 'kushal@gmail.com', '123', NULL, NULL);
-
---
 -- Indexes for dumped tables
 --
 

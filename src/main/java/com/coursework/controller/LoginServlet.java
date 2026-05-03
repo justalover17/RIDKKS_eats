@@ -23,8 +23,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/login.jsp")
-                .forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 
     @Override
@@ -37,16 +36,12 @@ public class LoginServlet extends HttpServlet {
         User user = userDao.findUserByEmail(email);
 
         if (user == null) {
-            request.setAttribute("error", "Invalid email or password.");
-            request.getRequestDispatcher("/WEB-INF/views/login.jsp")
-                    .forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/index.jsp?loginError=1");
             return;
         }
 
         if (!PasswordUtil.checkPassword(password, user.getPassword())) {
-            request.setAttribute("error", "Invalid email or password.");
-            request.getRequestDispatcher("/WEB-INF/views/login.jsp")
-                    .forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/index.jsp?loginError=1");
             return;
         }
 

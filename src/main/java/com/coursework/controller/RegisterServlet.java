@@ -25,8 +25,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/register.jsp")
-                .forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
     }
 
     @Override
@@ -40,9 +39,7 @@ public class RegisterServlet extends HttpServlet {
 
         User existingUser = userDao.findUserByEmail(email);
         if (existingUser != null) {
-            request.setAttribute("error", "Email already registered.");
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp")
-                    .forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/index.jsp?registerError=1");
             return;
         }
 
@@ -58,11 +55,9 @@ public class RegisterServlet extends HttpServlet {
             User newUser = userDao.findUserByEmail(email);
             Cart cart = new Cart(newUser.getUserId());
             cartDao.createCart(cart);
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/index.jsp?loginOpen=1");
         } else {
-            request.setAttribute("error", "Registration failed. Please try again.");
-            request.getRequestDispatcher("/WEB-INF/views/register.jsp")
-                    .forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/index.jsp?registerError=1");
         }
     }
 }

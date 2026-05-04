@@ -290,7 +290,7 @@
     <% session.removeAttribute("orderSuccess"); %>
 
     <nav>
-        <a href="${pageContext.request.contextPath}/food" class="logo-text">Riddik's Eats</a>
+        <a href="${pageContext.request.contextPath}/food" class="logo-text">Ridkk's Eats</a>
     </nav>
 
     <div class="confirm-screen">

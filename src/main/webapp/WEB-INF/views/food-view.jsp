@@ -23,7 +23,7 @@
     <div class="header-container">
         <div class="header-left">
             <a href="${pageContext.request.contextPath}/index.jsp" class="logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats" style="height: 40px;">
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 40px;">
                 <span class="logo-text">Riddik's Eats</span>
             </a>
         </div>

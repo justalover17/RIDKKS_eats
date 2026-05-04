@@ -288,7 +288,7 @@
     <div class="footer-container">
         <div class="footer-col brand-col">
             <div class="footer-logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats" style="height: 35px; margin-right: 10px;"> Riddik's Eats
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 35px; margin-right: 10px;"> Riddik's Eats
             </div>
             <div class="brand-desc-box">
                 <p>Bringing the finest culinary experiences straight to your doorstep. Fresh, fast, and full of flavor.</p>

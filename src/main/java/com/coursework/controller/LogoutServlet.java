@@ -21,6 +21,6 @@ public class LogoutServlet extends HttpServlet {
         SessionUtil.invalidate(request);
         CookieUtil.deleteCookie(response, "email");
 
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }

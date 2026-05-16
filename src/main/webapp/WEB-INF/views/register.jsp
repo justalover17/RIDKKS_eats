@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Riddik's Eats</title>
+    <title>Register | Ridkk's Eats</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -18,13 +18,17 @@
 </head>
 <body>
 
-<!-- Header -->
+<!--
+     HEADER SECTION
+     This is the top navigation bar of the website.
+     It contains the logo and the Login/Profile buttons.
+     -->
 <header class="header">
     <div class="header-container">
         <div class="header-left">
             <a href="${pageContext.request.contextPath}/index.jsp" class="logo">
                 <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 40px;">
-                <span class="logo-text">Riddik's Eats</span>
+                <span class="logo-text">Ridkk's Eats</span>
             </a>
         </div>
         <div class="header-right">
@@ -47,11 +51,16 @@
     </div>
 </header>
 
+<!--
+     REGISTRATION FORM SECTION
+     This creates the white box asking for the user's details
+     like their First Name, Last Name, Email, and Password.
+     -->
 <div class="auth-page">
     <div class="auth-card">
         <div class="auth-header">
             <a href="${pageContext.request.contextPath}/index.jsp">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats">
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats">
             </a>
             <h2>Create an Account</h2>
             <p style="color: var(--text-muted); margin-top:0.5rem;">Join us for fine delivery</p>
@@ -61,6 +70,7 @@
             <div class="error-msg">${error}</div>
         </c:if>
 
+        <!-- This form securely sends the new user data to the server -->
         <form action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
             <div class="form-row">
                 <div class="form-group">
@@ -72,7 +82,7 @@
                     <input type="text" id="lastName" required>
                 </div>
             </div>
-            
+
             <input type="hidden" id="combinedName" name="name">
 
             <div class="form-group">
@@ -84,7 +94,7 @@
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="regPassword">Password</label>
                 <input type="password" id="regPassword" name="password" required>
@@ -94,7 +104,7 @@
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" id="confirmPassword" required>
             </div>
-            
+
             <button type="submit" class="btn btn-primary btn-full">Create Account</button>
         </form>
 
@@ -104,12 +114,16 @@
     </div>
 </div>
 
-<!-- Footer -->
+<!--
+     FOOTER SECTION
+     This is the dark bottom area of the website.
+     It contains contact info and social media links.
+     -->
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-col brand-col">
             <div class="footer-logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats" style="height: 35px; margin-right: 10px;"> Riddik's Eats
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 35px; margin-right: 10px;"> Ridkk's Eats
             </div>
             <div class="brand-desc-box">
                 <p>Bringing the finest culinary experiences straight to your doorstep. Fresh, fast, and full of flavor.</p>
@@ -127,7 +141,7 @@
             <ul class="contact-list">
                 <li> Pokhara -17, Birauta</li>
                 <li>+977 9845342311</li>
-                <li>riddik'seats@gmail.com</li>
+                <li>ridkk'seats@gmail.com</li>
             </ul>
         </div>
         <div class="footer-col">
@@ -143,10 +157,15 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2026 Riddik's Eats. All rights reserved.</p>
+        <p>&copy; 2026 Ridkk's Eats. All rights reserved.</p>
     </div>
 </footer>
 
+<!--
+     JAVASCRIPT SECTION
+     This code runs on the user's computer to check if the
+     two passwords match BEFORE sending data to the server.
+     -->
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(e) {
         const pass = document.getElementById('regPassword').value;

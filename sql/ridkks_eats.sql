@@ -101,7 +101,7 @@ INSERT INTO `food_item` (`food_id`, `name`, `price`, `category_id`, `description
 (8, 'Momo Platter', 550.00, 1, 'A grand assortment of our best momos in different styles.'),
 (9, 'Pad thai', 480.00, 1, 'Authentic sweet and savory stir-fried rice noodles.'),
 (10, 'Club sandwich', 300.00, 2, 'Triple decker sandwich with chicken, egg, and mayo.'),
-(11, 'Riddiks Breakfast', 450.00, 2, 'Eggs, toast, sausages, beans, and grilled tomatoes.'),
+(11, 'Ridkk''s Breakfast', 450.00, 2, 'Eggs, toast, sausages, beans, and grilled tomatoes.'),
 (12, 'Vanilla  Waffle', 350.00, 2, 'Crispy waffle with premium vanilla ice cream and syrup.'),
 (13, 'Croissants', 200.00, 2, 'Freshly baked flaky buttery croissants.'),
 (14, 'Smoothie Bowl', 350.00, 2, 'Healthy and fresh fruit smoothie bowl.'),

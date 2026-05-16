@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Cart — Riddik's Eats</title>
+    <title>My Cart — Ridkk's Eats</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -332,7 +332,7 @@
 
 <nav>
     <a href="${pageContext.request.contextPath}/" class="logo">
-        <span class="logo-text">Riddik's Eats</span>
+        <span class="logo-text">Ridkk's Eats</span>
     </a>
     <a href="${pageContext.request.contextPath}/food" class="nav-back">← Back to Menu</a>
 </nav>

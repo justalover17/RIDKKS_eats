@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Riddik's Eats</title>
+    <title>Login | Ridkk's Eats</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -18,13 +18,17 @@
 </head>
 <body>
 
-<!-- Header -->
+<!--
+     HEADER SECTION
+     This is the top navigation bar of the website.
+     It contains the logo and the Login/Profile buttons.
+     -->
 <header class="header">
     <div class="header-container">
         <div class="header-left">
             <a href="${pageContext.request.contextPath}/index.jsp" class="logo">
                 <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 40px;">
-                <span class="logo-text">Riddik's Eats</span>
+                <span class="logo-text">Ridkk's Eats</span>
             </a>
         </div>
         <div class="header-right">
@@ -47,12 +51,17 @@
     </div>
 </header>
 
+<!--
+     LOGIN FORM SECTION
+     This creates the white box in the middle of the screen.
+     It asks the user for their Email and Password.
+     -->
 <div class="auth-page">
     <div class="auth-card">
-        
+
         <div class="auth-header">
             <a href="${pageContext.request.contextPath}/index.jsp">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats">
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats">
             </a>
             <h2>Welcome Back</h2>
             <p style="color: var(--text-muted); margin-top:0.5rem;">Sign in to continue</p>
@@ -62,17 +71,18 @@
             <div class="error-msg">${error}</div>
         </c:if>
 
+        <!-- This form sends the email and password to the server securely -->
         <form action="${pageContext.request.contextPath}/login" method="post">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            
+
             <button type="submit" class="btn btn-primary btn-full">Login</button>
         </form>
 
@@ -83,12 +93,16 @@
     </div>
 </div>
 
-<!-- Footer -->
+<!--
+     FOOTER SECTION
+     This is the dark bottom area of the website.
+     It contains contact info and social media links.
+     -->
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-col brand-col">
             <div class="footer-logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats" style="height: 35px; margin-right: 10px;"> Riddik's Eats
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 35px; margin-right: 10px;"> Ridkk's Eats
             </div>
             <div class="brand-desc-box">
                 <p>Bringing the finest culinary experiences straight to your doorstep. Fresh, fast, and full of flavor.</p>
@@ -106,7 +120,7 @@
             <ul class="contact-list">
                 <li> Pokhara -17, Birauta</li>
                 <li>+977 9845342311</li>
-                <li>riddik'seats@gmail.com</li>
+                <li>ridkk'seats@gmail.com</li>
             </ul>
         </div>
         <div class="footer-col">
@@ -122,7 +136,7 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2026 Riddik's Eats. All rights reserved.</p>
+        <p>&copy; 2026 Ridkk's Eats. All rights reserved.</p>
     </div>
 </footer>
 

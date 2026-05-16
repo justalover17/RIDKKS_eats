@@ -113,7 +113,7 @@
                                       border: 2px solid #e63946; color: #e63946;
                                       border-radius: 6px; font-size: 0.85rem;
                                       font-weight: 600; text-decoration: none;">
-                             Edit
+                            Edit
                         </a>
                     </div>
                     <% } %>

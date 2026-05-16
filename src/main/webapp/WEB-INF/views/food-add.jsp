@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Food Item | Riddik's Eats</title>
+    <title>Add Food Item | Ridkk's Eats</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -148,8 +148,8 @@
     <div class="header-container">
         <div class="header-left">
             <a href="${pageContext.request.contextPath}/index.jsp" class="logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats" style="height: 40px;">
-                <span class="logo-text">Riddik's Eats</span>
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 40px;">
+                <span class="logo-text">Ridkk's Eats</span>
             </a>
         </div>
         <div class="header-right">
@@ -226,7 +226,7 @@
     <div class="footer-container">
         <div class="footer-col brand-col">
             <div class="footer-logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 35px; margin-right: 10px;"> Riddik's Eats
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 35px; margin-right: 10px;"> Ridkk's Eats
             </div>
             <div class="brand-desc-box">
                 <p>Bringing the finest culinary experiences straight to your doorstep. Fresh, fast, and full of flavor.</p>
@@ -244,7 +244,7 @@
             <ul class="contact-list">
                 <li>Pokhara -17, Birauta</li>
                 <li>+977 9845342311</li>
-                <li>riddik'seats@gmail.com</li>
+                <li>ridkk'seats@gmail.com</li>
             </ul>
         </div>
         <div class="footer-col">
@@ -260,7 +260,7 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p>&copy; 2026 Riddik's Eats. All rights reserved.</p>
+        <p>&copy; 2026 Ridkk's Eats. All rights reserved.</p>
     </div>
 </footer>
 

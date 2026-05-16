@@ -73,7 +73,7 @@ public class FoodServlet extends HttpServlet {
             throws ServletException, IOException {
         String categoryParam = request.getParameter("category");
         String searchParam = request.getParameter("search");
-        
+
         ArrayList<FoodItem> foods;
         if (searchParam != null && !searchParam.trim().isEmpty()) {
             foods = foodDao.searchFood(searchParam.trim());
@@ -87,7 +87,7 @@ public class FoodServlet extends HttpServlet {
         } else {
             foods = foodDao.fetchAllFood();
         }
-        
+
         request.setAttribute("foods", foods);
         request.getRequestDispatcher("/WEB-INF/views/food-list.jsp")
                 .forward(request, response);
@@ -136,8 +136,15 @@ public class FoodServlet extends HttpServlet {
                 .forward(request, response);
     }
 
+    // CHANGED: Added role guard
     private void insertFood(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+
+        User user = SessionUtil.getUser(request);
+        if (user == null || !"admin".equals(user.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/food?action=list");
+            return;
+        }
 
         String name = request.getParameter("name");
         double price = Double.parseDouble(request.getParameter("price"));
@@ -151,8 +158,15 @@ public class FoodServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/food?action=list");
     }
 
+    //  CHANGED: Added role guard
     private void updateFood(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+
+        User user = SessionUtil.getUser(request);
+        if (user == null || !"admin".equals(user.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/food?action=list");
+            return;
+        }
 
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");

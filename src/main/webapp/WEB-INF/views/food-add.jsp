@@ -3,6 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
     User loggedInUser = (User) session.getAttribute("user");
+    if (loggedInUser == null || !"admin".equals(loggedInUser.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/food?action=list");
+        return;
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">

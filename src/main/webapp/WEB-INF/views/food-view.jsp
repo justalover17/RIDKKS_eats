@@ -1,3 +1,5 @@
+food view
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.coursework.entity.User" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -12,21 +14,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${food.name} | Riddik's Eats</title>
+    <title>${food.name} | Ridkk's Eats</title>
 
-    <!-- Google Fonts: Inter for body text, Playfair Display for headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 
-    <!-- Global stylesheet shared across all pages -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/index.css">
-    <!-- Page-specific stylesheet for food detail view -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/food-view.css">
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
+<!--
+     HEADER SECTION
+     This is the top navigation bar of the website.
+     It contains the logo and the Login/Profile buttons.
+     -->
 <header class="header">
     <div class="header-container">
 
@@ -34,27 +37,31 @@
         <div class="header-left">
             <a href="${pageContext.request.contextPath}/index.jsp" class="logo">
                 <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 40px;">
-                <span class="logo-text">Riddik's Eats</span>
+                <span class="logo-text">Ridkk's Eats</span>
             </a>
         </div>
 
         <!-- Right side of header: show Login button if not logged in, icons if logged in -->
         <div class="header-right">
             <% if (loggedInUser == null) { %>
-            <!-- Guest user: show login button -->
             <a href="${pageContext.request.contextPath}/login" class="btn btn-login">Login</a>
             <% } else { %>
-            <!-- Authenticated user: show action icon buttons -->
             <div class="user-icons">
-                <!-- Notification bell icon -->
                 <button class="icon-btn" title="Notifications">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 </button>
-                <!-- User profile icon -->
-                <button class="icon-btn" title="My Profile">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                </button>
-                <!-- Shopping cart icon -->
+                <div class="profile-dropdown-container" style="position: relative; display: inline-block;">
+                    <button class="icon-btn" title="My Profile" onclick="toggleProfileDropdown()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </button>
+                    <div id="profileDropdown" class="profile-dropdown" style="display: none; position: absolute; right: -50px; top: 120%; background: white; border: 1px solid #ddd; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 150px; text-align: center; z-index: 100;">
+                        <div style="font-size: 12px; color: #888; margin-bottom: 5px; text-transform: uppercase; font-weight: bold;">My Profile</div>
+                        <div style="font-weight: 600; margin-bottom: 10px; color: #333;">
+                            <%= (loggedInUser.getRole() != null && loggedInUser.getRole().equalsIgnoreCase("admin")) ? "Admin" : loggedInUser.getName() %>
+                        </div>
+                        <a href="${pageContext.request.contextPath}/logout" class="btn btn-primary" style="display: block; width: 100%; padding: 8px 0; font-size: 14px;">Logout</a>
+                    </div>
+                </div>
                 <button class="icon-btn" title="Cart">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
                 </button>
@@ -64,10 +71,14 @@
 
     </div>
 </header>
-<!-- ===== END HEADER ===== -->
+<!-- END HEADER -->
 
 
-<!-- ===== FOOD DETAIL VIEW ===== -->
+<!--
+     FOOD DETAIL SECTION
+     This part displays the big picture of the food,
+     the description, price, and the "Add to Cart" button.
+     -->
 <div class="view-container">
 
     <%-- Build the image URL dynamically using the food's name --%>
@@ -124,17 +135,21 @@
     </div>
 
 </div>
-<!-- ===== END FOOD DETAIL VIEW ===== -->
+<!-- END FOOD DETAIL VIEW -->
 
 
-<!-- ===== FOOTER ===== -->
+<!--
+     FOOTER SECTION
+     This is the dark bottom area of the website.
+     It contains contact info and social media links.
+     -->
 <footer class="footer">
     <div class="footer-container">
 
         <!-- Brand column: logo, name, and short description -->
         <div class="footer-col brand-col">
             <div class="footer-logo">
-                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Riddik's Eats" style="height: 35px; margin-right: 10px;"> Riddik's Eats
+                <img src="${pageContext.request.contextPath}/static/images/logo.png" alt="Ridkk's Eats" style="height: 35px; margin-right: 10px;"> Ridkk's Eats
             </div>
             <div class="brand-desc-box">
                 <p>Bringing the finest culinary experiences straight to your doorstep. Fresh, fast, and full of flavor.</p>
@@ -147,8 +162,6 @@
             <ul>
                 <li><a href="#">About Us</a></li>
                 <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
             </ul>
         </div>
 
@@ -156,9 +169,9 @@
         <div class="footer-col">
             <h4>Contact Info</h4>
             <ul class="contact-list">
-                <li>📍 123 Food Street, Culinary District</li>
-                <li>📞 +977 9800000000</li>
-                <li>✉️ support@riddikseats.com</li>
+                <li> Pokhara -17, Birauta</li>
+                <li>+977 9845342311</li>
+                <li>ridkk'seats@gmail.com</li>
             </ul>
         </div>
 
@@ -179,13 +192,17 @@
 
     <!-- Copyright bar at the bottom of the footer -->
     <div class="footer-bottom">
-        <p>&copy; 2026 Riddik's Eats. All rights reserved.</p>
+        <p>&copy; 2026 Ridkk's Eats. All rights reserved.</p>
     </div>
 </footer>
-<!-- ===== END FOOTER ===== -->
+<!-- END FOOTER -->
 
 
-<!-- ===== JAVASCRIPT ===== -->
+<!--
+     JAVASCRIPT SECTION
+     This code controls the "+" and "-" buttons so users
+     can change the quantity of the food they want to buy.
+     -->
 <script>
     // Get references to the quantity control elements
     const decreaseBtn = document.getElementById('decreaseQty');
@@ -207,8 +224,23 @@
             if(current < 20) qtyInput.value = current + 1;
         });
     }
-</script>
-<!-- ===== END JAVASCRIPT ===== -->
 
+    // Profile Dropdown Logic
+    function toggleProfileDropdown() {
+        const dropdown = document.getElementById('profileDropdown');
+        if(dropdown) {
+            dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
+        }
+    }
+
+    // Close dropdown if clicked outside
+    window.addEventListener('click', function(e) {
+        const container = document.querySelector('.profile-dropdown-container');
+        if (container && !container.contains(e.target)) {
+            const dropdown = document.getElementById('profileDropdown');
+            if(dropdown) dropdown.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>

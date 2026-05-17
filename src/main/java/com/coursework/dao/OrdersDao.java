@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public interface OrdersDao {
     boolean placeOrder(Orders order);
+    int placeOrderAndGetId(Orders order);
     ArrayList<Orders> fetchAllOrders();
     ArrayList<Orders> getOrdersByUserId(int userId);
     Orders findOrderById(int id);

@@ -28,6 +28,29 @@ public class OrdersDaoImpl implements OrdersDao {
     }
 
     @Override
+    public int placeOrderAndGetId(Orders order) {
+        Connection conn = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "INSERT INTO orders (user_id, total_amount, status) VALUES (?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, order.getUserId());
+            ps.setDouble(2, order.getTotalAmount());
+            ps.setString(3, order.getStatus());
+            ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error placing order: " + e.getMessage());
+        } finally {
+            DatabaseConnection.closeConnection(conn);
+        }
+        return -1;
+    }
+
+    @Override
     public ArrayList<Orders> fetchAllOrders() {
         ArrayList<Orders> list = new ArrayList<>();
         Connection conn = null;

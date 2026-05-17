@@ -145,6 +145,13 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.8rem;
             flex-shrink: 0;
+            overflow: hidden;
+        }
+        .food-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
         }
 
         .food-name {
@@ -376,7 +383,16 @@
                         %>
                         <div class="cart-card" style="animation-delay:${loop.index * 60}ms">
 
-                            <div class="food-thumb">🍴</div>
+                            <div class="food-thumb">
+                                <c:choose>
+                                    <c:when test="${not empty fi}">
+                                        <img src="${pageContext.request.contextPath}/static/images/${fi.name}.png"
+                                             alt="${fi.name}"
+                                             onerror="this.style.display='none';this.parentElement.innerText=''"/>
+                                    </c:when>
+                                    <c:otherwise>🍴</c:otherwise>
+                                </c:choose>
+                            </div>
 
                             <div>
                                 <div class="food-name">

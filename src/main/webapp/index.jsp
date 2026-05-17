@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.coursework.entity.User" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%
     User loggedInUser = (User) session.getAttribute("user");
 %>
@@ -49,9 +51,10 @@
                         <a href="${pageContext.request.contextPath}/logout" class="btn btn-primary" style="display: block; width: 100%; padding: 8px 0; font-size: 14px;">Logout</a>
                     </div>
                 </div>
-                <button class="icon-btn" title="Cart">
+                <%-- ✅ ONLY CHANGE: was <button>, now <a> linked to /cart --%>
+                <a href="${pageContext.request.contextPath}/cart?action=view" class="icon-btn" title="Cart" style="display:inline-flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;text-decoration:none;color:inherit;">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                </button>
+                </a>
             </div>
             <% } %>
         </div>
@@ -182,7 +185,7 @@
             dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
         }
     }
-    
+
     // Close dropdown if clicked outside
     window.addEventListener('click', function(e) {
         const container = document.querySelector('.profile-dropdown-container');

@@ -200,6 +200,110 @@
         }
         .btn-back:hover { background: var(--red); color: #fff; }
 
+        /* ── PAYMENT PANELS ── */
+
+        /* eSewa QR panel */
+        .esewa-panel {
+            display: none;
+            margin-top: 4px;
+            padding: 20px;
+            border: 1.5px solid #60bb46;
+            border-radius: 12px;
+            background: #f6fdf4;
+            text-align: center;
+        }
+        .esewa-panel .esewa-logo {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #3a8a2a;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .esewa-panel .qr-wrap {
+            display: inline-block;
+            padding: 10px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #d4edda;
+            margin-bottom: 10px;
+        }
+        .esewa-panel .qr-wrap img {
+            width: 160px;
+            height: 160px;
+            display: block;
+        }
+        .esewa-panel .esewa-note {
+            font-size: 0.78rem;
+            color: #3a8a2a;
+            line-height: 1.5;
+        }
+        .esewa-panel .esewa-id {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #2a6e1e;
+            margin-top: 6px;
+        }
+
+        /* Card payment panel */
+        .card-panel {
+            display: none;
+            margin-top: 4px;
+            padding: 20px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            background: #fafbff;
+        }
+        .card-panel .card-panel-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-panel .card-panel-title span {
+            font-size: 1.1rem;
+        }
+        .card-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .card-field { margin-bottom: 12px; }
+        .card-field label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 5px;
+        }
+        .card-field input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 11px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            color: var(--text);
+            outline: none;
+            background: var(--white);
+            transition: border-color .2s;
+        }
+        .card-field input:focus { border-color: #4a6cf7; background: var(--white); }
+        .card-icons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .card-icons span {
+            font-size: 1.4rem;
+        }
+
         /* ── CONFIRMATION SCREEN ── */
         .confirm-screen {
             display: flex;
@@ -282,10 +386,10 @@
 </head>
 <body>
 
-<%-- ══════════════════════════════════════════
+<%--
      CASE 1 — ORDER SUCCESS CONFIRMATION SCREEN
      Shows when CheckoutServlet redirects to ?status=success
-     ══════════════════════════════════════════ --%>
+      --%>
 <c:if test="${param.status == 'success'}">
     <% session.removeAttribute("orderSuccess"); %>
 
@@ -299,10 +403,10 @@
             <h1>Order Placed!</h1>
             <p>
                 Thank you for your order.<br>
-                We're preparing your food and<br>will deliver it to you soon. 🍴
+                We're preparing your food and<br>will deliver it to you soon.
             </p>
             <a href="${pageContext.request.contextPath}/food" class="btn-order-more">
-                🍽 Order More Food
+                 Order More Food
             </a>
             <a href="${pageContext.request.contextPath}/cart?action=view" class="btn-view-cart">
                 View Cart
@@ -311,9 +415,9 @@
     </div>
 </c:if>
 
-<%-- ══════════════════════════════════════════
+<%--
      CASE 2 — NORMAL CHECKOUT FORM
-     ══════════════════════════════════════════ --%>
+      --%>
 <c:if test="${param.status != 'success'}">
 
     <nav>
@@ -334,7 +438,7 @@
                 <%-- DELIVERY DETAILS --%>
             <div class="card">
                 <h2>Delivery Details</h2>
-                <form action="${pageContext.request.contextPath}/checkout" method="post">
+                <form action="${pageContext.request.contextPath}/checkout" method="post" id="checkoutForm">
 
                     <div class="field">
                         <label>Full Name</label>
@@ -357,11 +461,66 @@
 
                     <div class="field">
                         <label>Payment Method</label>
-                        <select name="paymentMethod">
+                        <select name="paymentMethod" id="paymentMethod" onchange="handlePaymentChange(this.value)">
                             <option value="cash">Cash on Delivery</option>
                             <option value="esewa">eSewa</option>
-                            <option value="khalti">Khalti</option>
+                            <option value="card">Card Payment</option>
                         </select>
+                    </div>
+
+                        <%-- ── eSewa QR Panel (hidden by default) ── --%>
+                    <div class="esewa-panel" id="esewaPanel">
+                        <div class="esewa-logo"> eSewa Payment</div>
+                        <div class="qr-wrap">
+                                <%--
+                                    Replace the src below with your actual eSewa QR code image.
+                                    Put it in: src/main/webapp/images/esewa-qr.png
+                                    Then use: src="${pageContext.request.contextPath}/images/esewa-qr.png"
+                                --%>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=esewa-ridkkseats-9800000000"
+                                 alt="eSewa QR Code">
+                        </div>
+                        <div class="esewa-note">
+                            Scan this QR code with your eSewa app to pay.<br>
+                            After payment, click <strong>Place Order</strong>.
+                        </div>
+                        <div class="esewa-id">eSewa ID: 9800000000</div>
+                    </div>
+
+                        <%-- ── Card Payment Panel (hidden by default) ── --%>
+                    <div class="card-panel" id="cardPanel">
+                        <div class="card-panel-title">
+                            <span>💳</span> Card Details
+                        </div>
+                        <div class="card-icons">
+                            <span title="Visa"></span>
+
+                        </div>
+                        <div class="card-field">
+                            <label>Cardholder Name</label>
+                            <input type="text" id="cardName" name="cardName"
+                                   placeholder="Name on card">
+                        </div>
+                        <div class="card-field">
+                            <label>Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber"
+                                   placeholder="1234 5678 9012 3456"
+                                   maxlength="19"
+                                   oninput="formatCardNumber(this)">
+                        </div>
+                        <div class="card-row">
+                            <div class="card-field">
+                                <label>Expiry Date</label>
+                                <input type="text" id="cardExpiry" name="cardExpiry"
+                                       placeholder="MM / YYYY" maxlength="7"
+                                       oninput="formatExpiry(this)">
+                            </div>
+                            <div class="card-field">
+                                <label>CVV</label>
+                                <input type="password" id="cardCvv" name="cardCvv"
+                                       placeholder="•••" maxlength="4">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="field">
@@ -369,7 +528,7 @@
                         <textarea name="notes" placeholder="Any special requests…"></textarea>
                     </div>
 
-                    <button type="submit" class="btn-place">✓ Place Order</button>
+                    <button type="submit" class="btn-place" onclick="return validatePayment()">✓ Place Order</button>
                 </form>
                 <a href="${pageContext.request.contextPath}/food" class="btn-back">+ Add More Items</a>
             </div>
@@ -422,6 +581,54 @@
     </div>
 
 </c:if>
+
+<script>
+    // Show/hide payment panels based on selected method
+    function handlePaymentChange(value) {
+        document.getElementById('esewaPanel').style.display = 'none';
+        document.getElementById('cardPanel').style.display  = 'none';
+
+        if (value === 'esewa') {
+            document.getElementById('esewaPanel').style.display = 'block';
+        } else if (value === 'card') {
+            document.getElementById('cardPanel').style.display  = 'block';
+        }
+        // cash → nothing extra shown
+    }
+
+    // Validate card fields before submit
+    function validatePayment() {
+        const method = document.getElementById('paymentMethod').value;
+        if (method !== 'card') return true;
+
+        const name   = document.getElementById('cardName').value.trim();
+        const number = document.getElementById('cardNumber').value.replace(/\s/g,'');
+        const expiry = document.getElementById('cardExpiry').value.trim();
+        const cvv    = document.getElementById('cardCvv').value.trim();
+
+        if (!name) { alert('Please enter the cardholder name.'); return false; }
+        if (number.length < 16) { alert('Please enter a valid 16-digit card number.'); return false; }
+        if (!expiry.match(/^\d{2}\s*\/\s*\d{2}$/)) { alert('Please enter expiry in MM / YY format.'); return false; }
+        if (cvv.length < 3) { alert('Please enter a valid CVV.'); return false; }
+        return true;
+    }
+
+    // Auto-format card number: "1234 5678 9012 3456"
+    function formatCardNumber(input) {
+        let v = input.value.replace(/\D/g, '').substring(0, 16);
+        input.value = v.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    // Auto-format expiry: "MM / YY"
+    function formatExpiry(input) {
+        let v = input.value.replace(/\D/g, '').substring(0, 4);
+        if (v.length >= 3) {
+            input.value = v.substring(0,2) + ' / ' + v.substring(2);
+        } else {
+            input.value = v;
+        }
+    }
+</script>
 
 </body>
 </html>

@@ -1,8 +1,8 @@
-food view
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.coursework.entity.User" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%-- Retrieve the logged-in user from the session --%>
 <%
@@ -81,14 +81,17 @@ food view
      -->
 <div class="view-container">
 
-    <%-- Build the image URL dynamically using the food's name --%>
-    <c:url value="/static/images/${food.name}.png" var="foodImageUrl" />
+    <%-- Build the image URL dynamically using the safe food name (without apostrophe and space) --%>
+    <c:set var="quote" value="'" />
+    <c:set var="safeName1" value="${fn:replace(food.name, quote, '')}" />
+    <c:set var="safeName2" value="${fn:replace(safeName1, ' ', '')}" />
+    <c:url value="/static/images/${safeName2}.png" var="foodImageUrl" />
 
     <!-- Food image section; falls back to logo if image not found -->
-    <div class="view-image" style="background-image: url('${foodImageUrl}');">
+    <div class="view-image" style="background-image: url(${foodImageUrl});">
         <%-- Hidden img tag used to detect load error and swap background to fallback logo --%>
         <img src="${foodImageUrl}" style="display:none;"
-             onerror="this.parentElement.style.backgroundImage='url(\'${pageContext.request.contextPath}/static/images/logo.png\')'">
+             onerror="this.parentElement.style.backgroundImage='url(${pageContext.request.contextPath}/static/images/logo.png)'">
     </div>
 
     <!-- Food info and add-to-cart section -->

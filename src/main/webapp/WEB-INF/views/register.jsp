@@ -88,21 +88,25 @@
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required>
+                <div id="emailError" style="color: #e63946; font-size: 0.85rem; margin-top: 5px; display: none;"></div>
             </div>
 
             <div class="form-group">
                 <label for="phone">Phone Number</label>
                 <input type="tel" id="phone" name="phone" required>
+                <div id="phoneError" style="color: #e63946; font-size: 0.85rem; margin-top: 5px; display: none;"></div>
             </div>
 
             <div class="form-group">
                 <label for="regPassword">Password</label>
                 <input type="password" id="regPassword" name="password" required>
+                <div id="passError" style="color: #e63946; font-size: 0.85rem; margin-top: 5px; display: none;"></div>
             </div>
 
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" id="confirmPassword" required>
+                <div id="confirmError" style="color: #e63946; font-size: 0.85rem; margin-top: 5px; display: none;"></div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-full">Create Account</button>
@@ -168,12 +172,49 @@
      -->
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(e) {
-        const pass = document.getElementById('regPassword').value;
-        const confirm = document.getElementById('confirmPassword').value;
+        let hasError = false;
 
+        // Clear all previous errors
+        document.getElementById('emailError').style.display = 'none';
+        document.getElementById('phoneError').style.display = 'none';
+        document.getElementById('passError').style.display = 'none';
+        document.getElementById('confirmError').style.display = 'none';
+
+        const email = document.getElementById('email').value;
+        if(!email.includes('@gmail.com')) {
+            const err = document.getElementById('emailError');
+            err.innerText = "Email must contain @gmail.com";
+            err.style.display = 'block';
+            hasError = true;
+        }
+
+        const phone = document.getElementById('phone').value;
+        if(!/^98\d{8}$/.test(phone)) {
+            const err = document.getElementById('phoneError');
+            err.innerText = "Phone number must be exactly 10 digits and start with 98";
+            err.style.display = 'block';
+            hasError = true;
+        }
+
+        const pass = document.getElementById('regPassword').value;
+        const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
+        if(!passRegex.test(pass)) {
+            const err = document.getElementById('passError');
+            err.innerText = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one symbol.";
+            err.style.display = 'block';
+            hasError = true;
+        }
+
+        const confirm = document.getElementById('confirmPassword').value;
         if(pass !== confirm) {
+            const err = document.getElementById('confirmError');
+            err.innerText = "Passwords do not match!";
+            err.style.display = 'block';
+            hasError = true;
+        }
+
+        if(hasError) {
             e.preventDefault();
-            alert("Passwords do not match!");
             return;
         }
 

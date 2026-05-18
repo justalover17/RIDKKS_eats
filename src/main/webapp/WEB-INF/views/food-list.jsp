@@ -1,7 +1,8 @@
-food list
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.coursework.entity.User" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <%
     User loggedInUser = (User) session.getAttribute("user");
@@ -108,7 +109,10 @@ food list
                        style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
                         <div class="food-item-img"
                              style="overflow: hidden; display: flex; align-items: center; justify-content: center; height: 200px; background-color: #f1f3f5;">
-                            <c:url value="/static/images/${food.name}.png" var="foodImageUrl" />
+                            <c:set var="quote" value="'" />
+                            <c:set var="safeName1" value="${fn:replace(food.name, quote, '')}" />
+                            <c:set var="safeName2" value="${fn:replace(safeName1, ' ', '')}" />
+                            <c:url value="/static/images/${safeName2}.png" var="foodImageUrl" />
                             <img src="${foodImageUrl}" alt="${food.name}"
                                  style="width: 100%; height: 100%; object-fit: cover;"
                                  onerror="this.src='${pageContext.request.contextPath}/static/images/logo.png'">

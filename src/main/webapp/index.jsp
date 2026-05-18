@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.coursework.entity.User" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <%
     User loggedInUser = (User) session.getAttribute("user");
 %>
@@ -51,10 +49,9 @@
                         <a href="${pageContext.request.contextPath}/logout" class="btn btn-primary" style="display: block; width: 100%; padding: 8px 0; font-size: 14px;">Logout</a>
                     </div>
                 </div>
-                <%-- ✅ ONLY CHANGE: was <button>, now <a> linked to /cart --%>
-                <a href="${pageContext.request.contextPath}/cart?action=view" class="icon-btn" title="Cart" style="display:inline-flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;text-decoration:none;color:inherit;">
+                <button class="icon-btn" title="Cart">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                </a>
+                </button>
             </div>
             <% } %>
         </div>
@@ -67,7 +64,7 @@
      It contains the big title and the search bar.
      -->
 <section class="home" id="homeSection">
-    <div class="home-bg" id="homeBg" style="background-image: url('${pageContext.request.contextPath}/static/images/Home%20page.png');"></div>
+    <div class="home-bg" id="homeBg" style="background-image: url('${pageContext.request.contextPath}/static/images/Homepage.png');"></div>
     <div class="home-content">
         <h1>Find your perfect meal.</h1>
         <p>Search your favorite cuisine</p>
@@ -102,7 +99,7 @@
             <div class="card-info"><h3>Pizza</h3></div>
         </a>
         <a href="${pageContext.request.contextPath}/food?action=view&id=11" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Ridkks%20Breakfast.png');"></div>
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/RidkksBreakfast.png');"></div>
             <div class="card-info"><h3>Ridkk's Breakfast</h3></div>
         </a>
         <a href="${pageContext.request.contextPath}/food?action=view&id=27" class="cuisine-card">
@@ -110,19 +107,19 @@
             <div class="card-info"><h3>Spaghetti</h3></div>
         </a>
         <a href="${pageContext.request.contextPath}/food?action=view&id=12" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Vanilla%20%20Waffle.png');"></div>
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/VanillaWaffle.png');"></div>
             <div class="card-info"><h3>Vanilla Waffle</h3></div>
         </a>
         <a href="${pageContext.request.contextPath}/food?action=view&id=10" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Club%20sandwich.png');"></div>
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Clubsandwich.png');"></div>
             <div class="card-info"><h3>Club Sandwich</h3></div>
         </a>
         <a href="${pageContext.request.contextPath}/food?action=view&id=9" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Pad%20thai.png');"></div>
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Padthai.png');"></div>
             <div class="card-info"><h3>Pad Thai</h3></div>
         </a>
         <a href="${pageContext.request.contextPath}/food?action=view&id=28" class="cuisine-card">
-            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Sirloin%20steak.png');"></div>
+            <div class="card-img" style="background-image: url('${pageContext.request.contextPath}/static/images/Sirloinsteak.png');"></div>
             <div class="card-info"><h3>Sirloin Steak</h3></div>
         </a>
     </div>
@@ -185,7 +182,7 @@
             dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
         }
     }
-
+    
     // Close dropdown if clicked outside
     window.addEventListener('click', function(e) {
         const container = document.querySelector('.profile-dropdown-container');

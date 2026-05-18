@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="com.coursework.entity.CartDetails" %>
 <%@ page import="com.coursework.entity.FoodItem" %>
 <%@ page import="com.coursework.dao.FoodItemDaoImpl" %>
@@ -386,7 +387,10 @@
                             <div class="food-thumb">
                                 <c:choose>
                                     <c:when test="${not empty fi}">
-                                        <img src="${pageContext.request.contextPath}/static/images/${fi.name}.png"
+                                        <c:set var="quote" value="'" />
+                                        <c:set var="safeName1" value="${fn:replace(fi.name, quote, '')}" />
+                                        <c:set var="safeName2" value="${fn:replace(safeName1, ' ', '')}" />
+                                        <img src="${pageContext.request.contextPath}/static/images/${safeName2}.png"
                                              alt="${fi.name}"
                                              onerror="this.style.display='none';this.parentElement.innerText=''"/>
                                     </c:when>

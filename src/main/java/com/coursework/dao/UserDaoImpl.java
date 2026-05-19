@@ -10,20 +10,26 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean insertUser(User user) {
         Connection conn = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             String sql = "INSERT INTO users (name, email, password, phone, role) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
+
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getPhone());
             ps.setString(5, user.getRole());
+
             ps.executeUpdate();
             return true;
+
         } catch (SQLException e) {
             System.out.println("Error inserting user: " + e.getMessage());
             return false;
+
         } finally {
             DatabaseConnection.closeConnection(conn);
         }
@@ -33,11 +39,14 @@ public class UserDaoImpl implements UserDao {
     public ArrayList<User> fetchAllUsers() {
         ArrayList<User> list = new ArrayList<>();
         Connection conn = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             String sql = "SELECT * FROM users";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
+
             while (rs.next()) {
                 User user = new User(
                         rs.getInt("user_id"),
@@ -49,25 +58,33 @@ public class UserDaoImpl implements UserDao {
                         rs.getTimestamp("created_at"),
                         rs.getTimestamp("updated_at")
                 );
+
                 list.add(user);
             }
+
         } catch (SQLException e) {
             System.out.println("Error fetching users: " + e.getMessage());
+
         } finally {
             DatabaseConnection.closeConnection(conn);
         }
+
         return list;
     }
 
     @Override
     public User findUserById(int id) {
         Connection conn = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             String sql = "SELECT * FROM users WHERE user_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
+
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 return new User(
                         rs.getInt("user_id"),
@@ -80,23 +97,30 @@ public class UserDaoImpl implements UserDao {
                         rs.getTimestamp("updated_at")
                 );
             }
+
         } catch (SQLException e) {
             System.out.println("Error finding user: " + e.getMessage());
+
         } finally {
             DatabaseConnection.closeConnection(conn);
         }
+
         return null;
     }
 
     @Override
     public User findUserByEmail(String email) {
         Connection conn = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             String sql = "SELECT * FROM users WHERE email = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, email);
+
             ResultSet rs = ps.executeQuery();
+
             if (rs.next()) {
                 return new User(
                         rs.getInt("user_id"),
@@ -109,32 +133,73 @@ public class UserDaoImpl implements UserDao {
                         rs.getTimestamp("updated_at")
                 );
             }
+
         } catch (SQLException e) {
             System.out.println("Error finding user by email: " + e.getMessage());
+
         } finally {
             DatabaseConnection.closeConnection(conn);
         }
+
         return null;
     }
 
     @Override
     public boolean updateUser(User user) {
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            return updateUserWithoutPassword(user);
+        }
+
         Connection conn = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             String sql = "UPDATE users SET name=?, email=?, password=?, phone=?, role=? WHERE user_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
+
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getPhone());
             ps.setString(5, user.getRole());
             ps.setInt(6, user.getUserId());
+
             ps.executeUpdate();
             return true;
+
         } catch (SQLException e) {
             System.out.println("Error updating user: " + e.getMessage());
             return false;
+
+        } finally {
+            DatabaseConnection.closeConnection(conn);
+        }
+    }
+
+    @Override
+    public boolean updateUserWithoutPassword(User user) {
+        Connection conn = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+
+            String sql = "UPDATE users SET name=?, email=?, phone=?, role=? WHERE user_id=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPhone());
+            ps.setString(4, user.getRole());
+            ps.setInt(5, user.getUserId());
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            System.out.println("Error updating user without password: " + e.getMessage());
+            return false;
+
         } finally {
             DatabaseConnection.closeConnection(conn);
         }
@@ -143,16 +208,21 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean deleteUser(int id) {
         Connection conn = null;
+
         try {
             conn = DatabaseConnection.getConnection();
+
             String sql = "DELETE FROM users WHERE user_id=?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
+
             ps.executeUpdate();
             return true;
+
         } catch (SQLException e) {
             System.out.println("Error deleting user: " + e.getMessage());
             return false;
+
         } finally {
             DatabaseConnection.closeConnection(conn);
         }

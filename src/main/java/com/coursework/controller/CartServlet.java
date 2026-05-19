@@ -20,6 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
@@ -34,33 +36,42 @@ public class CartServlet extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        if (action == null) {
-            action = "view";
+        if (action == null || "view".equals(action)) {
+            viewCart(request, response);
+            return;
         }
-// chabged
-        switch (action) {
-            case "view":
-                viewCart(request, response);
-                break;
-            case "add":
-                addToCart(request, response);
-                break;
-            case "remove":
-                removeItem(request, response);
-                break;
-            case "update":
-                updateQuantity(request, response);
-                break;
-            default:
-                viewCart(request, response);
-                break;
-        }
+
+        // Cart changes should happen through POST.
+        response.sendRedirect(request.getContextPath() + "/cart?action=view");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+
+        String action = request.getParameter("action");
+
+        if (action == null) {
+            action = "view";
+        }
+
+        switch (action) {
+            case "add":
+                addToCart(request, response);
+                break;
+
+            case "remove":
+                removeItem(request, response);
+                break;
+
+            case "update":
+                updateQuantity(request, response);
+                break;
+
+            default:
+                viewCart(request, response);
+                break;
+        }
     }
 
     private void viewCart(HttpServletRequest request, HttpServletResponse response)
@@ -79,12 +90,19 @@ public class CartServlet extends HttpServlet {
             ArrayList<CartDetails> items = cartDetailsDao.getCartItems(cart.getCartId());
 
             double total = 0;
+            Map<Integer, FoodItem> foodMap = new HashMap<>();
+
             for (CartDetails item : items) {
                 FoodItem food = foodDao.findFoodById(item.getFoodId());
-                total += food.getPrice() * item.getQuantity();
+
+                if (food != null) {
+                    total += food.getPrice() * item.getQuantity();
+                    foodMap.put(item.getFoodId(), food);
+                }
             }
 
             request.setAttribute("cartItems", items);
+            request.setAttribute("foodMap", foodMap);
             request.setAttribute("total", total);
         }
 
@@ -102,8 +120,17 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        int foodId = Integer.parseInt(request.getParameter("foodId"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        int foodId = parseInt(request.getParameter("foodId"), 0);
+        int quantity = parseInt(request.getParameter("quantity"), 1);
+
+        if (foodId <= 0) {
+            response.sendRedirect(request.getContextPath() + "/food");
+            return;
+        }
+
+        if (quantity < 1) {
+            quantity = 1;
+        }
 
         Cart cart = cartDao.getCartByUserId(user.getUserId());
 
@@ -113,8 +140,10 @@ public class CartServlet extends HttpServlet {
             cart = cartDao.getCartByUserId(user.getUserId());
         }
 
-        CartDetails cartItem = new CartDetails(cart.getCartId(), foodId, quantity);
-        cartDetailsDao.addToCart(cartItem);
+        if (cart != null) {
+            CartDetails cartItem = new CartDetails(cart.getCartId(), foodId, quantity);
+            cartDetailsDao.addToCart(cartItem);
+        }
 
         response.sendRedirect(request.getContextPath() + "/cart?action=view");
     }
@@ -122,8 +151,19 @@ public class CartServlet extends HttpServlet {
     private void removeItem(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        int cartDetailId = Integer.parseInt(request.getParameter("cartDetailId"));
-        cartDetailsDao.removeItem(cartDetailId);
+        User user = SessionUtil.getUser(request);
+
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        Cart cart = cartDao.getCartByUserId(user.getUserId());
+        int cartDetailId = parseInt(request.getParameter("cartDetailId"), 0);
+
+        if (cart != null && cartDetailId > 0) {
+            cartDetailsDao.removeItemFromCart(cartDetailId, cart.getCartId());
+        }
 
         response.sendRedirect(request.getContextPath() + "/cart?action=view");
     }
@@ -131,12 +171,37 @@ public class CartServlet extends HttpServlet {
     private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        int cartDetailId = Integer.parseInt(request.getParameter("cartDetailId"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        User user = SessionUtil.getUser(request);
 
-        CartDetails cd = new CartDetails(cartDetailId, 0, 0, quantity);
-        cartDetailsDao.updateQuantity(cd);
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        Cart cart = cartDao.getCartByUserId(user.getUserId());
+        int cartDetailId = parseInt(request.getParameter("cartDetailId"), 0);
+        int quantity = parseInt(request.getParameter("quantity"), 1);
+
+        if (quantity < 1) {
+            quantity = 1;
+        }
+
+        if (quantity > 99) {
+            quantity = 99;
+        }
+
+        if (cart != null && cartDetailId > 0) {
+            cartDetailsDao.updateQuantityForCart(cartDetailId, cart.getCartId(), quantity);
+        }
 
         response.sendRedirect(request.getContextPath() + "/cart?action=view");
+    }
+
+    private int parseInt(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 }

@@ -26,6 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/checkout")
 public class CheckoutServlet extends HttpServlet {
@@ -33,27 +35,28 @@ public class CheckoutServlet extends HttpServlet {
     private final CartDao cartDao = new CartDaoImpl();
     private final CartDetailsDao cartDetailsDao = new CartDetailsDaoImpl();
     private final FoodItemDao foodDao = new FoodItemDaoImpl();
+    private final OrdersDao ordersDao = new OrdersDaoImpl();
+    private final OrderDetailsDao orderDetailsDao = new OrderDetailsDaoImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        User user = SessionUtil.getUser(request);
+
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         if ("success".equals(request.getParameter("status"))) {
             request.getRequestDispatcher("/WEB-INF/views/checkout.jsp")
                     .forward(request, response);
             return;
         }
 
-        // Must be logged in
-        User user = SessionUtil.getUser(request);
-        if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
-            return;
-        }
-
-        // Get cart
         Cart cart = cartDao.getCartByUserId(user.getUserId());
 
-        // If cart empty → back to food list
         if (cart == null) {
             response.sendRedirect(request.getContextPath() + "/food");
             return;
@@ -66,16 +69,11 @@ public class CheckoutServlet extends HttpServlet {
             return;
         }
 
-        // Calculate total and attach food details
-        double total = 0;
-        for (CartDetails item : items) {
-            FoodItem food = foodDao.findFoodById(item.getFoodId());
-            if (food != null) {
-                total += food.getPrice() * item.getQuantity();
-            }
-        }
+        Map<Integer, FoodItem> foodMap = buildFoodMap(items);
+        double total = calculateCartTotal(items);
 
         request.setAttribute("cartItems", items);
+        request.setAttribute("foodMap", foodMap);
         request.setAttribute("total", total);
 
         request.getRequestDispatcher("/WEB-INF/views/checkout.jsp")
@@ -87,51 +85,96 @@ public class CheckoutServlet extends HttpServlet {
             throws ServletException, IOException {
 
         User user = SessionUtil.getUser(request);
+
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-
-
-        // Clear cart after order placed
         Cart cart = cartDao.getCartByUserId(user.getUserId());
-        if (cart != null) {
-            ArrayList<CartDetails> items = cartDetailsDao.getCartItems(cart.getCartId());
 
-            // Calculate total
-            double total = 0;
-            for (CartDetails item : items) {
-                FoodItem food = foodDao.findFoodById(item.getFoodId());
-                if (food != null) {
-                    total += food.getPrice() * item.getQuantity();
-                }
-            }
+        if (cart == null) {
+            response.sendRedirect(request.getContextPath() + "/cart?action=view");
+            return;
+        }
 
-            // Save order and get the generated order ID
-            OrdersDao ordersDao = new OrdersDaoImpl();
-            Orders order = new Orders(0, user.getUserId(), total, "Pending");
-            int orderId = ordersDao.placeOrderAndGetId(order);
+        ArrayList<CartDetails> items = cartDetailsDao.getCartItems(cart.getCartId());
 
-            // Save each cart item as an order detail
-            if (orderId != -1) {
-                OrderDetailsDao orderDetailsDao = new OrderDetailsDaoImpl();
-                for (CartDetails item : items) {
-                    FoodItem food = foodDao.findFoodById(item.getFoodId());
-                    double subtotal = food != null ? food.getPrice() * item.getQuantity() : 0;
-                    OrderDetails detail = new OrderDetails(0, orderId, item.getFoodId(), item.getQuantity(), subtotal);
-                    orderDetailsDao.addOrderItem(detail);
-                }
-            }
+        if (items == null || items.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/cart?action=view");
+            return;
+        }
 
-            // Clear the cart
-            for (CartDetails item : items) {
-                cartDetailsDao.removeItem(item.getCartDetailId());
+        double total = calculateCartTotal(items);
+
+        if (total <= 0) {
+            request.setAttribute("error", "Order could not be placed because the cart total is invalid.");
+            request.setAttribute("cartItems", items);
+            request.setAttribute("foodMap", buildFoodMap(items));
+            request.setAttribute("total", total);
+
+            request.getRequestDispatcher("/WEB-INF/views/checkout.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        Orders order = new Orders(0, user.getUserId(), total, "Pending");
+        int orderId = ordersDao.placeOrderAndGetId(order);
+
+        if (orderId <= 0) {
+            request.setAttribute("error", "Order could not be placed. Please try again.");
+            request.setAttribute("cartItems", items);
+            request.setAttribute("foodMap", buildFoodMap(items));
+            request.setAttribute("total", total);
+
+            request.getRequestDispatcher("/WEB-INF/views/checkout.jsp")
+                    .forward(request, response);
+            return;
+        }
+
+        for (CartDetails item : items) {
+            FoodItem food = foodDao.findFoodById(item.getFoodId());
+
+            if (food != null) {
+                double subtotal = food.getPrice() * item.getQuantity();
+                OrderDetails detail = new OrderDetails(0, orderId, item.getFoodId(), item.getQuantity(), subtotal);
+                orderDetailsDao.addOrderItem(detail);
             }
         }
 
-        // Set success flag and redirect
+        for (CartDetails item : items) {
+            cartDetailsDao.removeItemFromCart(item.getCartDetailId(), cart.getCartId());
+        }
+
         request.getSession().setAttribute("orderSuccess", true);
         response.sendRedirect(request.getContextPath() + "/checkout?status=success");
+    }
+
+    private Map<Integer, FoodItem> buildFoodMap(ArrayList<CartDetails> items) {
+        Map<Integer, FoodItem> foodMap = new HashMap<>();
+
+        for (CartDetails item : items) {
+            FoodItem food = foodDao.findFoodById(item.getFoodId());
+
+            if (food != null) {
+                foodMap.put(item.getFoodId(), food);
+            }
+        }
+
+        return foodMap;
+    }
+
+    private double calculateCartTotal(ArrayList<CartDetails> items) {
+        double total = 0;
+
+        for (CartDetails item : items) {
+            FoodItem food = foodDao.findFoodById(item.getFoodId());
+
+            if (food != null) {
+                total += food.getPrice() * item.getQuantity();
+            }
+        }
+
+        return total;
     }
 }

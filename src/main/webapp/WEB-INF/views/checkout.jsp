@@ -376,6 +376,18 @@
         }
         .btn-view-cart:hover { border-color: var(--muted); color: var(--text); }
 
+        .error-box {
+            background: #fff3f3;
+            border: 1px solid #ffd0d0;
+            color: #b42318;
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            max-width: 900px;
+            font-family: 'Inter', sans-serif;
+            font-size: .95rem;
+        }
+
         @media (max-width: 700px) {
             nav { padding: 0 16px; }
             .grid { grid-template-columns: 1fr; }
@@ -406,7 +418,7 @@
                 We're preparing your food and<br>will deliver it to you soon.
             </p>
             <a href="${pageContext.request.contextPath}/food" class="btn-order-more">
-                 Order More Food
+                Order More Food
             </a>
             <a href="${pageContext.request.contextPath}/cart?action=view" class="btn-view-cart">
                 View Cart
@@ -432,6 +444,10 @@
     <div class="page">
         <h1 class="page-title">Checkout</h1>
         <p class="page-subtitle">Almost there — fill in your details below.</p>
+
+        <c:if test="${not empty error}">
+            <div class="error-box">${error}</div>
+        </c:if>
 
         <div class="grid">
 

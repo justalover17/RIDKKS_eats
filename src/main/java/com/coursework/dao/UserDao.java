@@ -9,5 +9,6 @@ public interface UserDao {
     User findUserById(int id);
     User findUserByEmail(String email);
     boolean updateUser(User user);
+    boolean updateUserWithoutPassword(User user);
     boolean deleteUser(int id);
 }

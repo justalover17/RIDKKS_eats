@@ -54,6 +54,8 @@ public class LoginServlet extends HttpServlet {
 
         CookieUtil.addCookie(response, "email", user.getEmail(), 24 * 60 * 60);
 
+        // Login always goes to home page.
+        // Admin can open dashboard from home page button.
         response.sendRedirect(request.getContextPath() + "/home");
     }
 }

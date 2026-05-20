@@ -15,6 +15,7 @@
       <h4>Information</h4>
       <ul>
         <li><a href="${pageContext.request.contextPath}/aboutus.jsp">About Us</a></li>
+        <li><a href="${pageContext.request.contextPath}/contact.jsp">Contact Us</a></li>
         <li><a href="${pageContext.request.contextPath}/food">Menu</a></li>
         <li><a href="${pageContext.request.contextPath}/cart?action=view">Cart</a></li>
       </ul>

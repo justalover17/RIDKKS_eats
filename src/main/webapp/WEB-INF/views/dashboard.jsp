@@ -2,6 +2,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="com.coursework.entity.FoodItem" %>
 <%@ page import="com.coursework.entity.Orders" %>
+
 <%
     int totalFoodItems = request.getAttribute("totalFoodItems") != null ? (Integer) request.getAttribute("totalFoodItems") : 0;
     int totalCategories = request.getAttribute("totalCategories") != null ? (Integer) request.getAttribute("totalCategories") : 0;
@@ -11,29 +12,14 @@
 
     ArrayList<FoodItem> recentFoods = (ArrayList<FoodItem>) request.getAttribute("recentFoods");
     ArrayList<Orders> recentOrders = (ArrayList<Orders>) request.getAttribute("recentOrders");
-    ArrayList<String> dates = (ArrayList<String>) request.getAttribute("dates");
-    ArrayList<Integer> counts = (ArrayList<Integer>) request.getAttribute("counts");
 
     if (recentFoods == null) recentFoods = new ArrayList<>();
     if (recentOrders == null) recentOrders = new ArrayList<>();
-    if (dates == null) dates = new ArrayList<>();
-    if (counts == null) counts = new ArrayList<>();
-
-    StringBuilder dateLabels = new StringBuilder();
-    for (int i = 0; i < dates.size(); i++) {
-        dateLabels.append("'").append(dates.get(i)).append("'");
-        if (i < dates.size() - 1) dateLabels.append(",");
-    }
-
-    StringBuilder countValues = new StringBuilder();
-    for (int i = 0; i < counts.size(); i++) {
-        countValues.append(counts.get(i));
-        if (i < counts.size() - 1) countValues.append(",");
-    }
 
     request.setAttribute("pageTitle", "Dashboard | Ridkk's Eats");
     request.setAttribute("extraCss", "/static/css/dashboard.css");
 %>
+
 <%@ include file="/WEB-INF/templates/head.jsp" %>
 <body>
 <%@ include file="/WEB-INF/templates/header.jsp" %>
@@ -139,10 +125,14 @@
     </section>
 
     <section class="chart-container">
-        <h3>Orders in Last 7 Days</h3>
+        <h3>System Overview Chart</h3>
+
+        <p style="color:#777; margin-top:0.4rem; margin-bottom:1rem;">
+            This chart compares the main parts of the system such as food items, categories, total orders and today's orders.
+        </p>
 
         <div class="chart-wrapper">
-            <canvas id="orderChart"></canvas>
+            <canvas id="overviewChart"></canvas>
         </div>
     </section>
 </main>
@@ -151,32 +141,72 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const labels = [<%= dateLabels.toString() %>];
-    const dataValues = [<%= countValues.toString() %>];
-    const ctx = document.getElementById('orderChart');
+    const overviewCtx = document.getElementById('overviewChart');
 
-    if (ctx) {
-        new Chart(ctx, {
+    if (overviewCtx) {
+        new Chart(overviewCtx, {
             type: 'bar',
             data: {
-                labels: labels,
+                labels: ['Food Items', 'Categories', 'Total Orders', "Today's Orders"],
                 datasets: [{
-                    label: 'Orders',
-                    data: dataValues,
-                    backgroundColor: '#e63946',
-                    borderColor: '#d62828',
+                    label: 'System Count',
+                    data: [
+                        <%= totalFoodItems %>,
+                        <%= totalCategories %>,
+                        <%= totalOrders %>,
+                        <%= ordersToday %>
+                    ],
+                    backgroundColor: [
+                        '#e63946',
+                        '#f77f00',
+                        '#457b9d',
+                        '#2a9d8f'
+                    ],
+                    borderColor: [
+                        '#d62828',
+                        '#cc6b00',
+                        '#35647d',
+                        '#21867a'
+                    ],
                     borderWidth: 1,
-                    borderRadius: 8
+                    borderRadius: 10,
+                    barThickness: 70
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.raw;
+                            }
+                        }
+                    }
+                },
+
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
                             precision: 0
+                        },
+                        title: {
+                            display: true,
+                            text: 'Count'
+                        }
+                    },
+
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Dashboard Areas'
                         }
                     }
                 }
@@ -184,5 +214,6 @@
         });
     }
 </script>
+
 </body>
 </html>
